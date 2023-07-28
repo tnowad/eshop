@@ -1,5 +1,12 @@
+import { BrowserRouter } from "react-router-dom";
+import Layout from "./components/Layout";
+
 function App() {
-  return <div className="underline text-red-600">Hello World</div>;
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
 }
 
 export default App;
