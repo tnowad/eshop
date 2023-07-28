@@ -2,6 +2,8 @@ import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addCartItem } from "../../redux/slices/cartSlice";
+
+import { toast } from "react-toastify";
 export interface ProductCardProps {
   id: string;
   imageUrl: string;
@@ -27,7 +29,7 @@ const ProductCard = ({
         price,
       })
     );
-    console.log("Product added to cart!");
+    toast.info("Product added to cart!");
   };
 
   return (
