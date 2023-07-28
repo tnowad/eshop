@@ -100,7 +100,7 @@ const Shop = () => {
           {productsData.length > 0 ? (
             <ProductList products={productsData} />
           ) : (
-            <h1>No products are found!</h1>
+            <h1 className="text-center text-3xl">No products are found!</h1>
           )}
         </div>
       </section>
