@@ -7,6 +7,7 @@ import Checkout from "../pages/Checkout";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import NotFound from "../pages/NotFound";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
   return (
@@ -15,10 +16,12 @@ const Router = () => {
       <Route path="home" element={<Home />} />
       <Route path="shop" element={<Shop />} />
       <Route path="shop/:id" element={<ProductDetails />} />
-      <Route path="cart" element={<Cart />} />
-      <Route path="checkout" element={<Checkout />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<SignUp />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="cart" element={<Cart />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
