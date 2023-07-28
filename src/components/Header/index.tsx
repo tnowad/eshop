@@ -18,7 +18,7 @@ const navLinks = [
 
 const Header = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center sticky top-0 backdrop-blur-lg bg-white/80 z-10">
       <div className="container">
         <div className="flex justify-between py-5 text-lg">
           <Link to="/">
