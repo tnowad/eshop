@@ -3,11 +3,11 @@ import CommonSection from "../components/CommonSection";
 import Helmet from "../components/Helmet";
 import { useAppDispatch, useAppSelector } from "../hooks/storeHook";
 import { removeCartItem, updateCartItem } from "../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
-  const { cartItems, totalAmount, totalQuantity } = useAppSelector(
-    (state) => state.cart
-  );
+  const { cartItems, totalAmount } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
   return (
@@ -59,6 +59,7 @@ const Cart = () => {
                       <button
                         onClick={() => {
                           dispatch(removeCartItem(item.id));
+                          toast.error("Removed product in cart!");
                         }}
                       >
                         <Icon icon="material-symbols:delete-outline" />
@@ -68,9 +69,17 @@ const Cart = () => {
                 ))}
               </tbody>
             </table>
-            <div>
-              <h2>Subtotal</h2>
-              <span>{totalAmount}</span>
+            <div className="mt-2 lg:px-4">
+              <h2 className="text-xl font-bold">Subtotal</h2>
+              <span>${totalAmount}</span>
+              <p className="text-gray">
+                Taxes and shipping will calculate in checkout.
+              </p>
+              <Link to="/checkout">
+                <button className="mt-3 p-3 shadow-md outline-none bg-white rounded w-full">
+                  Checkout
+                </button>
+              </Link>
             </div>
           </div>
         </div>
