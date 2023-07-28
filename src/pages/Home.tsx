@@ -157,7 +157,7 @@ const Home = () => {
       (item) => item.category === "sofa"
     );
     setBestSalesProduct(filteredBestSalesProducts);
-  });
+  }, []);
 
   return (
     <Helmet title="Home">
