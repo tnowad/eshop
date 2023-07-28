@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import logo from "../../assets/logo.svg";
+import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/storeHook";
 const navLinks = [
   {
     display: "Home",
@@ -17,6 +19,7 @@ const navLinks = [
 ];
 
 const Header = () => {
+  const { totalQuantity } = useAppSelector((state) => state.cart);
   return (
     <div className="flex justify-center sticky top-0 backdrop-blur-lg bg-white/80 z-10">
       <div className="container">
@@ -43,7 +46,7 @@ const Header = () => {
             <Link to="/">
               <span className="relative">
                 <Icon icon="mdi:heart-outline" />
-                <span className="text-sm absolute top-0 right-0 bg-blue-5 rounded-full w-3 h-3 flex items-center justify-center text-white">
+                <span className="text-sm absolute top-0 -right-1 bg-blue-5 rounded-full w-4 h-4 flex items-center justify-center text-white">
                   1
                 </span>
               </span>
@@ -51,9 +54,11 @@ const Header = () => {
             <Link to="cart">
               <span className="relative">
                 <Icon icon="mdi:cart-outline" />
-                <span className="text-sm absolute top-0 right-0 bg-blue-5 rounded-full w-3 h-3 flex items-center justify-center text-white">
-                  1
-                </span>
+                {totalQuantity > 0 && (
+                  <span className="text-sm absolute top-0 -right-1 bg-blue-5 rounded-full w-4 h-4 flex items-center justify-center text-white">
+                    {totalQuantity}
+                  </span>
+                )}
               </span>
             </Link>
             <span className="relative">
