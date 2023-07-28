@@ -1,14 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Helmet from "../components/Helmet";
 import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
 
-  const handleSubmit = () => {
-    console.log(formData);
+  const handleSubmit = async () => {
+    const { email, password } = formData;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const { user } = userCredential;
+      console.log(user);
+      toast.success("Successfully logged in!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
