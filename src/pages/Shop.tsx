@@ -1,5 +1,11 @@
+import CommonSection from "../components/CommonSection";
+
 const Shop = () => {
-  return <div>Shop</div>;
+  return (
+    <div>
+      <CommonSection title="Products" />
+    </div>
+  );
 };
 
 export default Shop;
