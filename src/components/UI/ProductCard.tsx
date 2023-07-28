@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { addCartItem } from "../../redux/slices/cartSlice";
 export interface ProductCardProps {
   id: string;
   imageUrl: string;
@@ -16,6 +17,19 @@ const ProductCard = ({
   category,
   price,
 }: ProductCardProps) => {
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(
+      addCartItem({
+        id,
+        imageUrl,
+        productName,
+        price,
+      })
+    );
+    console.log("Product added to cart!");
+  };
+
   return (
     <div>
       <div>
@@ -33,7 +47,9 @@ const ProductCard = ({
           <p className="font-light text-center">{category}</p>
         </div>
         <div className="flex items-center justify-between">
-          <Icon icon="material-symbols:add" />
+          <span onClick={handleAddToCart}>
+            <Icon icon="material-symbols:add" />
+          </span>
           <span className="px-3">${price}</span>
         </div>
       </div>
