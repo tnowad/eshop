@@ -1,7 +1,6 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CommonSection from "../components/CommonSection";
 import Helmet from "../components/Helmet";
-import products from "../mocks/products";
 import ProductList from "../components/UI/ProductList";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks/storeHook";

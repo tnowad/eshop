@@ -35,14 +35,10 @@ const Home = () => {
   const [trendingProducts, setTrendingProduct] = useState<Product[]>([]);
   const [bestSalesProducts, setBestSalesProduct] = useState<Product[]>([]);
   useEffect(() => {
-    const filteredTrendingProducts = products.filter(
-      (item) => item.category === "chair"
-    );
-    setTrendingProduct(products);
-    const filteredBestSalesProducts = products.filter(
-      (item) => item.category === "sofa"
-    );
-    setBestSalesProduct(products);
+    const filteredTrendingProducts = products.filter((item) => item.category);
+    setTrendingProduct(filteredTrendingProducts);
+    const filteredBestSalesProducts = products.filter((item) => item.category);
+    setBestSalesProduct(filteredBestSalesProducts);
   }, [products]);
 
   return (

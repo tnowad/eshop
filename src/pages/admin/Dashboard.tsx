@@ -19,7 +19,7 @@ const Dashboard = () => {
 
   const averageRating =
     totalProducts > 0
-      ? products.reduce((acc, product) => acc + product.avgRating, 0) /
+      ? products.reduce((acc, product) => acc + product.avgRating!, 0) /
         totalProducts
       : 0;
 
