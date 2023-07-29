@@ -14,13 +14,7 @@ const Login = () => {
   const handleSubmit = async () => {
     const { email, password } = formData;
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const { user } = userCredential;
-      console.log(user);
+      await signInWithEmailAndPassword(auth, email, password);
       toast.success("Successfully logged in!");
       navigate("/");
     } catch (error) {
