@@ -1,13 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import logo from "../../assets/logo.svg";
+import { useAppSelector } from "../../hooks/storeHook";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { toast } from "react-toastify";
 
+const navLinks = [
+  {
+    display: "Dashboard",
+    link: "/dashboard/home",
+  },
+  {
+    display: "All Products",
+    link: "/dashboard/all-products",
+  },
+  {
+    display: "Orders",
+    link: "/dashboard/orders",
+  },
+  {
+    display: "Users",
+    link: "/dashboard/users",
+  },
+];
+
 const AdminHeader = () => {
+  const { totalQuantity } = useAppSelector((state) => state.cart);
   const { currentUser } = useAuth();
   const handleLogout = async () => {
     try {
@@ -25,7 +46,40 @@ const AdminHeader = () => {
           <Link to="/">
             <img src={logo} alt="logo" />
           </Link>
-          <div className="grid text-2xl grid-cols-3 gap-x-2 flex justify-end">
+          <div className="flex">
+            {navLinks.map((item) => {
+              return (
+                <NavLink
+                  to={item.link}
+                  key={item.link}
+                  className={({ isActive }) => {
+                    return isActive ? "font-bold" : "font-light";
+                  }}
+                >
+                  <p className="px-3">{item.display}</p>
+                </NavLink>
+              );
+            })}
+          </div>
+          <div className="grid text-2xl grid-cols-3 gap-x-2 justify-end">
+            {/* <Link to="/"> */}
+            <span className="relative">
+              <Icon icon="iconamoon:notification" />
+              <span className="text-sm absolute top-0 -right-1 bg-blue-5 rounded-full w-4 h-4 flex items-center justify-center text-white">
+                1
+              </span>
+            </span>
+            {/* </Link> */}
+            {/* <Link to="cart"> */}
+            <span className="relative">
+              <Icon icon="uil:setting" />
+              {totalQuantity > 0 && (
+                <span className="text-sm absolute top-0 -right-1 bg-blue-5 rounded-full w-4 h-4 flex items-center justify-center text-white">
+                  {totalQuantity}
+                </span>
+              )}
+            </span>
+            {/* </Link> */}
             <span
               className="relative"
               onClick={() => {
