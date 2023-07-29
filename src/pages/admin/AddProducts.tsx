@@ -5,8 +5,10 @@ import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddProducts = () => {
+  const navigate = useNavigate();
   const initialProductState: Partial<Product> = {
     productName: "",
     category: "",
@@ -47,6 +49,7 @@ const AddProducts = () => {
               imageUrl: downloadURL,
             });
             toast.success("Successfully add product");
+            navigate("/dashboard/all-products");
           });
         }
       );
