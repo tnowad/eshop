@@ -34,11 +34,11 @@ const ProductCard = ({
 
   return (
     <div>
-      <div>
+      <div className="w-full h-60 overflow-hidden">
         <img
           src={imageUrl}
           alt="product image"
-          className="hover:scale-102 duration-300"
+          className="hover:scale-102 duration-300 w-full h-full object-fill"
         />
       </div>
       <div className="p-3">
