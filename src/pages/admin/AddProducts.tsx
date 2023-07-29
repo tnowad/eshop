@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Helmet from "../../components/Helmet";
 import Product from "../../interfaces/Product";
+import { addDoc, collection } from "firebase/firestore";
+import { db, storage } from "../../firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { toast } from "react-toastify";
 
 const AddProducts = () => {
   const initialProductState: Partial<Product> = {
@@ -14,10 +18,41 @@ const AddProducts = () => {
 
   const [product, setProduct] = useState<Partial<Product>>(initialProductState);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     console.log("Product data:", product, "Image file:", file);
+
+    if (!file) {
+      toast.error("Must add product image");
+      return;
+    }
+    try {
+      const docRef = collection(db, "products");
+      const storageRef = ref(
+        storage,
+        `productsImages/${Date.now() + file.name}`
+      );
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        () => {},
+        () => {
+          toast.error("Can't upload file");
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await addDoc(docRef, {
+              ...product,
+              imageUrl: downloadURL,
+            });
+            toast.success("Successfully add product");
+          });
+        }
+      );
+    } catch (error) {
+      toast.error("Can't add product");
+    }
 
     setProduct(initialProductState);
     setFile(null);
