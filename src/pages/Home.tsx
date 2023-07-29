@@ -5,7 +5,7 @@ import Service from "../components/Service";
 import ProductList from "../components/UI/ProductList";
 import { useEffect, useState } from "react";
 import Product from "../interfaces/Product";
-import products from "../mocks/products";
+import useGetData from "../hooks/useGetData";
 
 const services = [
   {
@@ -31,18 +31,19 @@ const services = [
 ];
 
 const Home = () => {
+  const { data: products } = useGetData<Product>("products");
   const [trendingProducts, setTrendingProduct] = useState<Product[]>([]);
   const [bestSalesProducts, setBestSalesProduct] = useState<Product[]>([]);
   useEffect(() => {
     const filteredTrendingProducts = products.filter(
       (item) => item.category === "chair"
     );
-    setTrendingProduct(filteredTrendingProducts);
+    setTrendingProduct(products);
     const filteredBestSalesProducts = products.filter(
       (item) => item.category === "sofa"
     );
-    setBestSalesProduct(filteredBestSalesProducts);
-  }, []);
+    setBestSalesProduct(products);
+  }, [products]);
 
   return (
     <Helmet title="Home">

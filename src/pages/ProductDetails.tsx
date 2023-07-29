@@ -1,4 +1,4 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CommonSection from "../components/CommonSection";
 import Helmet from "../components/Helmet";
 import products from "../mocks/products";
@@ -8,12 +8,34 @@ import { useAppDispatch } from "../hooks/storeHook";
 import { addCartItem } from "../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 import StarInput from "../components/UI/StartInput";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import Product from "../interfaces/Product";
+import useGetData from "../hooks/useGetData";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = products.find((item) => item.id === id);
+  const [product, setProduct] = useState<Product>();
+  const { data: products } = useGetData<Product>("products");
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const docRef = doc(db, "products", id!);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log(docSnap.data());
+          setProduct({ ...docSnap.data(), id: docSnap.id } as Product);
+        } else {
+          console.log("No such product!");
+        }
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
+
+    fetchProduct();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
@@ -23,20 +45,9 @@ const ProductDetails = () => {
     rating: 5,
     text: "",
   });
-
   if (!product) {
-    return <Navigate to="/not-found" />;
+    return <>null</>;
   }
-  const {
-    productName,
-    category,
-    imageUrl,
-    price,
-    reviews,
-    description,
-    avgRating,
-  } = product;
-
   const relatedProducts = products.filter(
     (item) => item.category == product.category
   );
@@ -45,9 +56,9 @@ const ProductDetails = () => {
     dispatch(
       addCartItem({
         id,
-        imageUrl,
-        productName,
-        price,
+        imageUrl: product.imageUrl,
+        productName: product.productName,
+        price: product.price,
       })
     );
     toast.info("Product added to cart!");
@@ -57,32 +68,36 @@ const ProductDetails = () => {
   };
 
   return (
-    <Helmet title={productName}>
-      <CommonSection title={productName} />
+    <Helmet title={product.productName}>
+      <CommonSection title={product.productName} />
       <section className="flex justify-center pt-4">
         <div className="container">
           <div className="grid lg:grid-cols-2 justify-center items-center">
             <div className="lg:h-100 lg:w-100">
               <img
-                src={imageUrl}
-                alt={productName}
+                src={product.imageUrl}
+                alt={product.productName}
                 className="h-full w-full object-cover"
               />
             </div>
             <div>
               <div>
-                <h2 className="text-bold text-2xl">{productName}</h2>
-                <span className="capitalize text-gray mt-2">{category}</span>
+                <h2 className="text-bold text-2xl">{product?.productName}</h2>
+                <span className="capitalize text-gray mt-2">
+                  {product?.category}
+                </span>
                 <div className="pt-2 flex text-md items-center">
-                  <StarInput value={avgRating} />
+                  <StarInput value={product?.avgRating ?? 0} />
                   <p className="text-gray">
-                    (<span className="text-amber">{avgRating}</span>
+                    (<span className="text-amber">{product?.avgRating}</span>
                     ratings)
                   </p>
                 </div>
 
-                <span className="text-xl font-bold pt-2">${price}</span>
-                <p className="text-gray pt-2">{description}</p>
+                <span className="text-xl font-bold pt-2">
+                  ${product?.price}
+                </span>
+                <p className="text-gray pt-2">{product?.description}</p>
                 <button
                   className="mt-3 p-3 shadow-md outline-none bg-white rounded w-full"
                   onClick={handleAddToCart}
@@ -96,13 +111,15 @@ const ProductDetails = () => {
       </section>
       <section className="flex justify-center mt-2">
         <div className="container">
-          <h1 className="font-bold text-xl">Review ({reviews.length})</h1>
+          <h1 className="font-bold text-xl">
+            Review ({product?.reviews?.length})
+          </h1>
           <div>
-            {reviews.map((item) => (
+            {product?.reviews?.map((item) => (
               <div key={item.id} className="pt-3">
-                <StarInput value={avgRating} />
+                <StarInput value={product?.avgRating ?? 5} />
                 <span className="text-gray">
-                  (<span className="text-amber">{avgRating}</span>
+                  (<span className="text-amber">{product?.avgRating}</span>
                   ratings)
                 </span>
                 <div>{item.text}</div>

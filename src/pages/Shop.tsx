@@ -4,9 +4,10 @@ import Helmet from "../components/Helmet";
 import { useEffect, useState } from "react";
 import Product from "../interfaces/Product";
 import ProductList from "../components/UI/ProductList";
-import products from "../mocks/products";
+import useGetData from "../hooks/useGetData";
 
 const Shop = () => {
+  const { data: products } = useGetData<Product>("products");
   const [productsData, setProductsData] = useState<Product[]>(products);
 
   const [searchForm, setSearchForm] = useState<{

@@ -6,7 +6,7 @@ export default interface Product {
   productName: string;
   category: string;
   price: number;
-  avgRating: number;
-  reviews: Review[];
+  avgRating?: number;
+  reviews?: Review[];
   description: string;
 }
