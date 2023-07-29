@@ -44,7 +44,7 @@ const Shop = () => {
     }
 
     setProductsData(filteredProducts);
-  }, [searchForm]);
+  }, [searchForm, products]);
 
   return (
     <Helmet title="Shop">
